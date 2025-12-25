@@ -1,0 +1,24 @@
+{% comment %} {% extends 'base.html' %} {% endcomment %}
+{% block body %}
+<div class="container my-5">
+    <br />
+    <h1>Upload multiple images in django</h1>
+    <br />
+    <p class="text-muted">Product uploads are now managed from each service provider profile.</p>
+    <hr />
+    <div class="row">
+        {% for product in productlist %}
+        <div class="card m-4" style="width: 18rem;">
+            {% comment %} {{ product.banner }} {% endcomment %}
+            {% load static %}
+            <img src="{% static product.banner.url %}" alt="Image URL: {{ product.banner }}" class="card-img-top" style="width: 200px; height: 200px;"> </img>           
+            <div class="card-body">
+                <h5 class="card-title">{{product.title}}</h5>
+            </div>
+        </div>
+        {% empty %}
+        <p>No product yet</p>
+        {% endfor %}
+    </div>
+</div>
+{%endblock%}

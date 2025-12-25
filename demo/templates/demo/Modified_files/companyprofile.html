@@ -1,0 +1,406 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+  <title>Company Profile</title>
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'assets/css/fontawesome.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/templatemo-572-designer.css' %}">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #0f1115;
+      color: #fff;
+      margin: 0;
+      padding-top: 80px;
+    }
+
+    header {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      background-color: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(6px);
+    }
+
+    .profile-hero {
+      background-image: url('{% static "assets/images/banner-bg3.jpg" %}');
+      background-size: cover;
+      background-position: center;
+      padding: 80px 0 40px;
+    }
+
+    .profile-wrapper {
+      margin-top: -60px;
+    }
+
+    .profile-summary {
+      background: #1b1e24;
+      border: none;
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.45);
+    }
+
+    .logo-circle {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin: 0 auto 20px;
+    }
+
+    .logo-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .info-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .info-list li {
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+
+    .info-list span {
+      display: block;
+      color: #a0a7b4;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .gallery-card {
+      background: #101218;
+      border-radius: 24px;
+      padding: 25px;
+      box-shadow: 0 35px 70px rgba(0,0,0,0.45);
+      min-height: 620px;
+    }
+
+    .gallery-image {
+      border-radius: 16px;
+      max-height: 520px;
+      object-fit: cover;
+      width: 100%;
+      background: #000;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+      filter: invert(1);
+    }
+
+    .gallery-thumbs img {
+      border-radius: 12px;
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+      border: 2px solid transparent;
+      transition: border-color 0.2s ease;
+    }
+
+    .gallery-thumbs button {
+      border: none;
+      background: transparent;
+      padding: 0;
+      width: 100%;
+    }
+
+    .gallery-thumbs img.active-thumb,
+    .gallery-thumbs button:focus img {
+      border-color: #ff565b;
+    }
+
+    .empty-gallery {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      min-height: 320px;
+      border: 2px dashed rgba(255,255,255,0.3);
+      border-radius: 16px;
+      color: #cfd3db;
+    }
+
+    /* Rating stars */
+    .rating-input { display: flex; gap: 6px; align-items: center; }
+    .rating-input input { display: none; }
+    .star-label { cursor: pointer; font-size: 26px; color: rgba(255,255,255,0.45); }
+    .star-label .star { display: inline-block; }
+    .rating-input input:checked ~ .star { color: #ffcc00; }
+    .rating-input input:checked + .star { color: #ffcc00; }
+    .rating-input label:hover ~ label .star, .rating-input label:hover .star { color: #ffcc00; }
+
+    footer {
+      background-color: #fff;
+      color: #000;
+      margin-top: 80px;
+      padding-top: 40px;
+    }
+
+    footer {
+      background-color: #fff;
+      color: #000;
+      margin-top: 80px;
+      padding-top: 40px;
+    }
+  </style>
+</head>
+<body>
+<header id="top">
+  <nav class="main-navigation navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'choose' %}"><img src="{% static 'assets/images/projlogo-transformed.png' %}" style="height: 60px; width: 240px;" alt="BuildSmartHub"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="{% url 'choose' %}">Homepage</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About Us</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact Us</a></li>
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Profile</a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              {% if is_service_provider %}
+              <li><a class="dropdown-item" href="{% url 'companyprofile' %}">View Profile</a></li>
+              <li><a class="dropdown-item" href="{% url 'editprofile' %}">Edit Profile</a></li>
+              <li><a class="dropdown-item" href="{% url 'createprof' %}">Create Profile</a></li>
+              <li><a class="dropdown-item" href="{% url 'edit_account' %}">Edit Account</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href=" {% url 'index' %} ">Logout</a></li>
+              {% elif is_user %}
+              <li><a class="dropdown-item" href="{% url 'edit_account' %}">Edit Account</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href=" {% url 'index' %} ">Logout</a></li>
+              {% else %}
+              <li><a class="dropdown-item" href="{% url 'trending' %}">Login</a></li>
+              <li><a class="dropdown-item" href="{% url 'signup' %}">Sign Up</a></li>
+              {% endif %}
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<section class="profile-hero">
+  <div class="container">
+    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center">
+      <div>
+        <h1 class="display-5 fw-bold text-white">{{ profile.company_name }}</h1>
+        <p class="mb-0 text-white-50">{{ profile.service_type }}{% if profile.user.city %} &bull; {{ profile.user.city }}{% endif %}</p>        <div class="mt-2">
+          <strong class="text-warning">{{ avg_rating|floatformat:1 }}</strong>
+          <span class="ms-2">
+            {% with avg_rating|floatformat:0 as avg_round %}
+              {% for _ in "12345"|make_list %}
+                {% if forloop.counter <= avg_round %}
+                  <span class="text-warning">&#9733;</span>
+                {% else %}
+                  <span class="text-muted">&#9733;</span>
+                {% endif %}
+              {% endfor %}
+            {% endwith %}
+          </span>
+          <small class="text-white-50"> ({{ rating_count }} ratings)</small>
+        </div>      </div>
+      {% if is_owner %}
+      <div class="mt-3 mt-lg-0">
+        <a href="{% url 'editprofile' %}" class="btn btn-outline-light">Edit Profile</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<div class="container profile-wrapper">
+  <div class="row g-4 align-items-stretch">
+    <div class="col-lg-9 order-lg-1 order-2">
+      <div class="gallery-card h-100">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h4 class="mb-0">Product Gallery</h4>
+            <small class="text-muted">Uploaded during profile creation</small>
+          </div>
+        </div>
+        {% if photos %}
+        <div id="profileGallery" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            {% for photo in photos %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+              <img src="{{ photo.image.url }}" class="d-block w-100 gallery-image" alt="Photo {{ forloop.counter }} of {{ profile.company_name }}">
+            </div>
+            {% endfor %}
+          </div>
+          {% if photos|length > 1 %}
+          <button class="carousel-control-prev" type="button" data-bs-target="#profileGallery" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#profileGallery" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+          {% endif %}
+        </div>
+        {% if photos|length > 1 %}
+        <div class="gallery-thumbs mt-3">
+          <div class="row g-2">
+            {% for photo in photos %}
+            <div class="col-4 col-md-3">
+              <button type="button" data-bs-target="#profileGallery" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}aria-current="true"{% endif %} aria-label="Slide {{ forloop.counter }}">
+                <img src="{{ photo.image.url }}" class="{% if forloop.first %}active-thumb{% endif %}" alt="Thumbnail {{ forloop.counter }}">
+              </button>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+        {% else %}
+        <div class="empty-gallery">
+          <p>No product images uploaded yet.</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-lg-3 order-lg-2 order-1">
+      <div class="profile-summary h-100">
+        <div class="logo-circle">
+          {% if profile.logo %}
+          <img src="{{ profile.logo.url }}" alt="{{ profile.company_name }} logo">
+          {% else %}
+          <img src="{% static 'assets/images/trending-item-01.jpg' %}" alt="{{ profile.company_name }} logo">
+          {% endif %}
+        </div>
+        <h3 class="text-center">{{ profile.company_name }}</h3>
+        <p class="text-center text-muted">{{ profile.service_type }}</p>
+        <hr>
+        <p>{{ profile.company_description|default:"No company description provided yet." }}</p>
+        <ul class="info-list">
+          <li><span>Office Address</span>{{ profile.office_address }}</li>
+          <li><span>Office Number</span>{{ profile.office_number }}</li>
+          <li><span>Contact</span>{{ profile.user.contact }}</li>
+          <li><span>Email</span>{{ profile.user.email }}</li>
+          <li><span>GST Number</span>{{ profile.gst_number }}</li>
+          <li><span>PAN Number</span>{{ profile.pan_number }}</li>
+        </ul>
+
+        <hr>
+        <div class="mt-3">
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+
+          {% if can_rate %}
+          <h5 class="text-white">Rate this profile</h5>
+          <form method="post" action="{% url 'rate_profile' profile.id %}">
+            {% csrf_token %}
+            <div class="rating-input" aria-label="Rating">
+              {% for ch in "12345"|make_list %}
+                <label class="star-label">
+                  <input type="radio" name="rating" value="{{ forloop.counter }}" {% if user_rating == forloop.counter %}checked{% endif %}>
+                  <span class="star">&#9733;</span>
+                </label>
+              {% endfor %}
+            </div>
+            <div class="mt-2">
+              <textarea name="comment" class="form-control" placeholder="Optional comment"></textarea>
+            </div>
+            <div class="mt-2">
+              <button class="btn btn-primary btn-sm">Submit Rating</button>
+            </div>
+          </form>
+          {% else %}
+            {% if user_rating %}
+              <p class="small text-muted">Your rating: {{ user_rating }} / 5</p>
+            {% endif %}
+            {% if not request.session.logged_in_user_id %}
+              <p class="small text-muted">Log in as a user to rate this profile.</p>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="about-widget">
+          <img src="{% static 'assets/images/footer-logo.png' %}" alt="BuildSmartHub footer logo">
+          <p>We Build connections, we Build everything, We Build SMART.</p>
+        </div>
+      </div>
+      <div class="col-lg-2 offset-lg-2">
+        <div class="location-widget">
+          <h4>Our Location</h4>
+          <p>CG road <br><br>Ahemdabad <br>India</p>
+        </div>
+      </div>
+      <div class="col-lg-2">
+        <div class="customer-care">
+          <h4>Customer Care</h4>
+          <ul class="info">
+            <li><a href="#">010-020-0340</a></li>
+            <li><a href="#">090-080-0760</a></li>
+            <li><a href="#">info@company.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-2">
+        <div class="follow-us">
+          <h4>Follow Us</h4>
+          <ul class="social-links">
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <div class="sub-footer">
+          <div class="row">
+            <div class="col-lg-6">
+              <p>Copyright © 2023 BuildSmartHub, Ltd. All Rights Reserved.</p>
+            </div>
+            <div class="col-lg-6 text-end">
+              <a href="#top" class="scroll-to-top text-decoration-none">
+                Go to Top
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-up" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 10a.5.5 0 0 0 .5-.5V3.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 0 0 .708.708L7.5 3.707V9.5a.5.5 0 0 0 .5.5zm-7 2.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,293 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <title>{{ page_heading|default:"Service Feed" }}</title>
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'assets/css/fontawesome.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/templatemo-572-designer.css' %}">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image: url('{% static background_image %}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            margin: 0;
+            padding-top: 100px;
+        }
+
+        header {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background-color: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(6px);
+        }
+
+        .social-feed {
+            text-align: center;
+            color: white;
+            padding: 60px 0 120px;
+        }
+
+        .feed-item {
+            background: rgba(0, 0, 0, 0.65);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: #fff;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .feed-item:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.35);
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 220px;
+            object-fit: contain;
+            border-radius: 12px;
+            background: #fff;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+        }
+
+        .profile-name a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .profile-name a:hover {
+            text-decoration: underline;
+        }
+
+        .caption {
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            min-height: 60px;
+        }
+
+        .meta {
+            font-size: 0.85rem;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .meta span {
+            display: block;
+        }
+
+        .view-profile-btn {
+            margin-top: auto;
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 30px;
+            background: #ff565b;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .view-profile-btn:hover {
+            background: #ff6d72;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.35);
+        }
+
+        @media (max-width: 767px) {
+            .profile-image {
+                height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav class="main-navigation navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href=" {% url 'choose' %} "><img src="{% static 'assets/images/projlogo-transformed.png' %}" style="height: 60px; width: 240px;" alt="BuildSmartHub"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href=" {% url 'choose' %} ">Homepage</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact Us</a></li>
+                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Profile</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    {% if is_service_provider %}
+                                <li><a class="dropdown-item" href="{% url 'companyprofile' %}">View Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url 'editprofile' %}">Edit Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url 'createprof' %}">Create Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url 'edit_account' %}">Edit Account</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href=" {% url 'index' %} ">Logout</a></li>
+                            {% elif is_user %}
+                                <li><a class="dropdown-item" href="{% url 'edit_account' %}">Edit Account</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href=" {% url 'index' %} ">Logout</a></li>
+                            {% else %}
+                                <li><a class="dropdown-item" href="{% url 'trending' %}">Login</a></li>
+                                <li><a class="dropdown-item" href="{% url 'signup' %}">Sign Up</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<section class="social-feed">
+    <div class="container">
+        <h1 class="section-title">{{ page_heading }}</h1>
+
+        <form method="get" class="row g-3 mb-4">
+          <div class="col-md-4">
+            <input class="form-control" type="search" name="q" placeholder="Search by name, description or city" value="{{ query|default:'' }}">
+          </div>
+          <div class="col-md-3">
+            <select name="city" class="form-select">
+              <option value="">All Cities</option>
+              {% for c in cities %}
+                <option value="{{ c }}" {% if c == selected_city %}selected{% endif %}>{{ c }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-2">
+            <select name="min_rating" class="form-select">
+              <option value="">Min Rating</option>
+              {% for i in "12345"|make_list %}
+                <option value="{{ forloop.counter }}" {% if min_rating|stringformat:"s" == forloop.counter|stringformat:"s" %}selected{% endif %}>{{ forloop.counter }}+</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-3 d-flex">
+            <button class="btn btn-primary me-2">Filter</button>
+            <a href="?" class="btn btn-outline-light">Clear</a>
+          </div>
+        </form>
+
+        <div class="row">
+            {% for profile in profiles %}
+            <div class="col-lg-4 col-md-6 mb-4 d-flex">
+                <div class="feed-item w-100">
+                    {% if profile.logo %}
+                        <img src="{{ profile.logo.url }}" alt="{{ profile.company_name }}" class="profile-image">
+                    {% else %}
+                        <img src="{% static 'assets/images/trending-item-01.jpg' %}" alt="{{ profile.company_name }}" class="profile-image">
+                    {% endif %}
+                    <div class="profile-name">
+                        <a href="{% url 'profile_detail' profile.id %}">{{ profile.company_name }}</a>
+                    </div>
+                    <p class="caption">{{ profile.company_description|default:"No description provided yet."|truncatechars:140 }}</p>
+                    <div class="meta">
+                        <span><strong>City:</strong> {{ profile.user.city|default:"N/A" }}</span>
+                        <span><strong>Contact:</strong> {{ profile.office_number|default:profile.user.contact }}</span>
+                        <span><strong>Email:</strong> {{ profile.user.email }}</span>
+                        <span><strong>Rating:</strong> {{ profile.avg_rating|default:0|floatformat:1 }} / 5 ({{ profile.rating_count|default:0 }})</span>
+                    </div>
+                    <a href="{% url 'profile_detail' profile.id %}" class="view-profile-btn">View Profile</a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-white" style="font-size: 1.2rem;">No profiles found in this category yet. Be the first to create one!</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="mt-4">
+          <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+              {% if page_obj.has_previous %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if selected_city %}&city={{ selected_city }}{% endif %}{% if min_rating %}&min_rating={{ min_rating }}{% endif %}" aria-label="Previous">Previous</a>
+                </li>
+              {% endif %}
+              {% for num in paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                  <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}{% if selected_city %}&city={{ selected_city }}{% endif %}{% if min_rating %}&min_rating={{ min_rating }}{% endif %}">{{ num }}</a>
+                </li>
+              {% endfor %}
+              {% if page_obj.has_next %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if selected_city %}&city={{ selected_city }}{% endif %}{% if min_rating %}&min_rating={{ min_rating }}{% endif %}" aria-label="Next">Next</a>
+                </li>
+              {% endif %}
+            </ul>
+          </nav>
+        </div>
+    </div>
+</section>
+
+<footer style="background-color: rgba(255, 255, 255, 0.95); padding-top: 3%;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="about-widget">
+                    <img src="{% static 'assets/images/footer-logo.png' %}" alt="BuildSmartHub footer logo">
+                    <p>We build connections for every service you need.</p>
+                </div>
+            </div>
+            <div class="col-lg-2 offset-lg-2">
+                <div class="location-widget">
+                    <h4>Our Location</h4>
+                    <p>CG road <br>Ahemdabad <br>India</p>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="customer-care">
+                    <h4>Customer Care</h4>
+                    <ul class="info">
+                        <li><a href="tel:0100200340">010-020-0340</a></li>
+                        <li><a href="tel:0900800760">090-080-0760</a></li>
+                        <li><a href="mailto:info@company.com">info@company.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="follow-us">
+                    <h4>Follow Us</h4>
+                    <ul class="social-links">
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+</body>
+</html>
+
+
